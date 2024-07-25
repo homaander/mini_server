@@ -5,17 +5,17 @@
 ```
 POST /register
   ->  "{
-         "regUsername": "...",
-         "regPassword": "...",
-         "regSPassword": "..."
+         "username": "...",
+         "password": "...",
+         "confirm_password": "..."
        }"
 
   <- "{
-        "respError": 1|0
-        "respMessage": "..."|""
-        "respData": "{
+        "error": 1|0
+        "message": "..."|""
+        "data": {
           "session_key": "..."
-        }"
+        }
       }"
 ```
 
@@ -23,16 +23,16 @@ POST /register
 ```
 POST /login
   -> "{
-        "authUsername": "...",
-        "authPassword": "..."
+        "username": "...",
+        "password": "..."
       }"
 
   <- "{
-        "respError": 1|0
-        "respMessage": "..."|""
-        "respData": "{
+        "error": 1|0
+        "message": "..."|""
+        "data": {
           "session_key": "..."
-        }"
+        }
       }"
 ```
 
@@ -40,13 +40,13 @@ POST /login
 ```
 POST /logout
   -> "{
-        "logoutSessionKey": "..."
+        "session_key": "..."
       }"
 
   <- "{
-        "respError": 1|0
-        "respMessage": "..."|""
-        "respData": ""
+        "error": 1|0
+        "message": "..."|""
+        "data": ""
       }"
 ```
 
@@ -54,14 +54,14 @@ POST /logout
 ```
 POST /send
   -> "{
-       "sendSessionKey": "..."
-       "sendMessage": "..."
+       "session_key": "..."
+       "message": "..."
      }"
 
   <- "{
-      "respError": 1|0
-      "respMessage": "..."|""
-      "respData": ""
+      "error": 1|0
+      "message": "..."|""
+      "data": ""
     }"
 ```
 
@@ -69,25 +69,35 @@ POST /send
 ```
 POST /get
   -> "{
-       "getSessionKey": "..."
+       "session_key": "..."
      }"
 
   <- "{
-      "respError": 1|0
-      "respMessage": "..."|""
-      "respData": "{'messages': [{'user_id':...,'message_text':'...','send_time':'YYYY-MM-DD HH:MM:SS'}, ...]}"
+      "error": 1|0
+      "message": "..."|""
+      "data": {
+        "messages": [
+          {'user_id':...,'message_text':'...','send_time':'YYYY-MM-DD HH:MM:SS'}, 
+          ..
+        ]
+      }
     }"
 ```
 
 ```
 POST /getusers
   -> "{
-       "getSessionKey": "..."
+       "session_key": "..."
      }"
 
   <- "{
-      "respError": 1|0
-      "respMessage": "..."|""
-      "respData": "{'users': [{'user_id':...,'avatar':'...','login':'...','create_time':'YYYY-MM-DD HH:MM:SS'}, ...]}"
+      "error": 1|0
+      "message": "..."|""
+      "data": {
+        'users': [
+          {'user_id':...,'avatar':'...','login':'...','create_time':'YYYY-MM-DD HH:MM:SS'},
+          ...
+        ]
+      }
     }"
 ```
