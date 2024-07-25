@@ -34,7 +34,6 @@ instance ToJSON AuthForm where
 data RegForm = RegForm {
     regUsername  :: String
   , regPassword  :: String
-  , regCofirmPassword :: String
   }
     deriving (Show)
 
@@ -42,13 +41,11 @@ instance FromJSON RegForm where
   parseJSON (Object v) = RegForm 
                            <$> v .: "username" 
                            <*> v .: "password"
-                           <*> v .: "confirm_password"
   parseJSON _ = error "Error JSON"
 instance ToJSON RegForm where
-  toJSON (RegForm username password confirm_password) = object [
+  toJSON (RegForm username password) = object [
           "username"         .= username
         , "password"         .= password
-        , "confirm_password" .= confirm_password
         ]
 
 
@@ -73,16 +70,12 @@ register regForm = do
   let
     username  = regUsername regForm
     password  = regPassword regForm
-    confirm_password = regCofirmPassword regForm
 
   if length username < 3
     then pure (Responce 1 "Минимальная длинна логина: 3" (ReqFrom ""))
 
-  -- else if length password < 40
-  --   then pure (Responce 1 "Неверный формат пароля" "")
-
-  else if password /= confirm_password
-    then pure (Responce 1 "Пароли не совпадают" (ReqFrom ""))
+--
+--
 
   else
     registerUser username password

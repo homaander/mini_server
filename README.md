@@ -6,8 +6,7 @@
 POST /register
   ->  "{
          "username": "...",
-         "password": "...",
-         "confirm_password": "..."
+         "password": "..."   -- SHA1
        }"
 
   <- "{
