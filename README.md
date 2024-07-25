@@ -1,5 +1,8 @@
 # API
 
+
+## Регистрация
+```
 POST /register
   ->  "{
          "regUsername": "...",
@@ -14,8 +17,10 @@ POST /register
           "session_key": "..."
         }"
       }"
+```
 
-
+## Вход
+```
 POST /login
   -> "{
         "authUsername": "...",
@@ -29,8 +34,10 @@ POST /login
           "session_key": "..."
         }"
       }"
+```
 
-
+## Выход
+```
 POST /logout
   -> "{
         "logoutSessionKey": "..."
@@ -41,8 +48,10 @@ POST /logout
         "respMessage": "..."|""
         "respData": ""
       }"
+```
 
-
+## Отправка сообщеения
+```
 POST /send
   -> "{
        "sendSessionKey": "..."
@@ -54,7 +63,10 @@ POST /send
       "respMessage": "..."|""
       "respData": ""
     }"
+```
 
+## Получение сообщения
+```
 POST /get
   -> "{
        "getSessionKey": "..."
@@ -65,7 +77,9 @@ POST /get
       "respMessage": "..."|""
       "respData": "{'messages': [{'user_id':...,'message_text':'...','send_time':'YYYY-MM-DD HH:MM:SS'}, ...]}"
     }"
+```
 
+```
 POST /getusers
   -> "{
        "getSessionKey": "..."
@@ -76,3 +90,4 @@ POST /getusers
       "respMessage": "..."|""
       "respData": "{'users': [{'user_id':...,'avatar':'...','login':'...','create_time':'YYYY-MM-DD HH:MM:SS'}, ...]}"
     }"
+```
