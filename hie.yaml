@@ -1,10 +1,10 @@
 cradle:
   stack:
     - path: "./src"
-      component: "simpleapi:lib"
+      component: "miniserver:lib"
 
     - path: "./app/Main.hs"
-      component: "simpleapi:exe:simpleapi-exe"
+      component: "miniserver:exe:miniserver-exe"
 
     - path: "./test"
-      component: "simpleapi:test:simpleapi-test"
+      component: "miniserver:test:miniserver-test"

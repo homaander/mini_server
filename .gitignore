@@ -1,4 +1,7 @@
 .stack-work/
+test/node_modules/
 .vscode/
 db/main.db
+*.code-workspace
+*.cabal
 *~
