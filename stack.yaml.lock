@@ -17,8 +17,8 @@ packages:
     git: https://github.com/scotty-web/scotty.git
 snapshots:
 - completed:
-    sha256: bc144ddf301a5c99f2cf51c7de50279ba144fd4486cb3c66f87ed761d6bbf6e9
-    size: 719131
-    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/22/27.yaml
+    sha256: 795b7a893148a42f09956611a0fa1139293fe6ef934d053468d8e53e3e013390
+    size: 719577
+    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/22/30.yaml
   original:
-    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/22/27.yaml
+    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/22/30.yaml
