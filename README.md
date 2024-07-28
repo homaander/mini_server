@@ -105,11 +105,9 @@ POST /get_users
   {
     "error": 1 | 0,
     "message": "..." | "",
-    "data": {
-      'users': [
-        {'user_id':...,'avatar':'...','login':'...','create_time':'YYYY-MM-DD HH:MM:SS'},
-        ...
-      ]
-    }
+    "data": []
+      {'user_id':...,'avatar':'...','login':'...','create_time':'YYYY-MM-DD HH:MM:SS'},
+      ...
+    ]
   }
 ```
