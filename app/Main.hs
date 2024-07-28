@@ -10,6 +10,7 @@ import Data.Text.Lazy (Text)
 import Auth
 import Responce
 import Message
+import User
 
 
 opts :: Options
@@ -41,9 +42,13 @@ main = scottyOpts opts $ do
 
   post "/get" $ do
     reqForm <- jsonData :: ActionM ReqFrom
-    -- resp <- liftIO $ logout reqForm
-    -- json resp
-    json respOk
+    resp <- liftIO $ getMessages reqForm
+    json resp
+
+  post "/get_users" $ do
+    reqForm <- jsonData :: ActionM ReqFrom
+    resp <- liftIO $ getUsers reqForm
+    json resp
 
   post "/send" $ do
     sendForm <- jsonData :: ActionM SendForm
@@ -51,19 +56,6 @@ main = scottyOpts opts $ do
     json resp
 
   get "/" $ do
-    html $ baseHTML "Main" [
+    html $ mconcat [
         "<h1>" <> "Scotty, Index me up!" <> "</h1>"
       ]
-
-baseHTML :: Text -> [Text] -> Text
-baseHTML title tags = mconcat [
-    "<!DOCTYPE html>"
-  , "<html>"
-  , "  <head>"
-  , "    <title>" <> title <> "</title>"
-  , "  </head>"
-  , "  <body>"
-  ,      mconcat tags
-  , "  </body>"
-  , "</html>"
-  ]

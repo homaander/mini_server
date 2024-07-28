@@ -3,100 +3,113 @@
 
 ## Регистрация
 ```
+Запрос:
 POST /register
-  ->  "{
-         "username": "...",
-         "password": "..."   -- SHA1
-       }"
+  {
+    "username": "...",
+    "password": "*SHA1_pass*"
+  }
 
-  <- "{
-        "error": 1|0
-        "message": "..."|""
-        "data": {
-          "session_key": "..."
-        }
-      }"
+Ответ:
+  {
+    "error": 1 | 0
+    "message": "..." | ""
+    "data": {
+      "session_key": "..."
+    }
+  }
 ```
 
 ## Вход
 ```
+Запрос:
 POST /login
-  -> "{
-        "username": "...",
-        "password": "..."
-      }"
+  {
+    "username": "...",
+    "password": "..."
+  }
 
-  <- "{
-        "error": 1|0
-        "message": "..."|""
-        "data": {
-          "session_key": "..."
-        }
-      }"
+Ответ:
+  {
+    "error": 1 | 0
+    "message": "..." | ""
+    "data": {
+      "session_key": "..."
+    }
+  }
 ```
 
 ## Выход
 ```
+Запрос:
 POST /logout
-  -> "{
-        "session_key": "..."
-      }"
+  {
+    "session_key": "..."
+  }
 
-  <- "{
-        "error": 1|0
-        "message": "..."|""
-        "data": ""
-      }"
+Ответ:
+  {
+    "error": 1 | 0
+    "message": "..." | ""
+    "data": ""
+  }
 ```
 
 ## Отправка сообщеения
 ```
+Запрос:
 POST /send
-  -> "{
-       "session_key": "..."
-       "message": "..."
-     }"
+  {
+    "session_key": "..."
+    "message": "..."
+  }
 
-  <- "{
-      "error": 1|0
-      "message": "..."|""
-      "data": ""
-    }"
+Ответ:
+  {
+    "error": 1|0
+    "message": "..."|""
+    "data": ""
+  }
 ```
 
 ## Получение сообщения
 ```
-POST /get
-  -> "{
+Запрос:
+POST /get_messages
+  {
        "session_key": "..."
-     }"
+  }
 
-  <- "{
-      "error": 1|0
-      "message": "..."|""
-      "data": {
-        "messages": [
-          {'user_id':...,'message_text':'...','send_time':'YYYY-MM-DD HH:MM:SS'}, 
-          ..
-        ]
-      }
-    }"
+Ответ:
+  {
+    "error": 1|0
+    "message": "..."|""
+    "data": {
+      "messages": [
+        {'user_id':...,'body':'...','send_time':'YYYY-MM-DD HH:MM:SS'}, 
+        ..
+      ]
+    }
+  }
 ```
 
+## Получить список всех пользователей
 ```
-POST /getusers
-  -> "{
-       "session_key": "..."
-     }"
+Запрос:
+POST /get_users
+  {
+    "session_key": "..."
+  }
 
-  <- "{
-      "error": 1|0
-      "message": "..."|""
-      "data": {
-        'users': [
-          {'user_id':...,'avatar':'...','login':'...','create_time':'YYYY-MM-DD HH:MM:SS'},
-          ...
-        ]
-      }
-    }"
+Ответ:
+  {
+    "error": 1|0
+    "message": "..."|""
+    "data": {
+      'users': [
+        {'user_id':...,'avatar':'...','login':'...','create_time':'YYYY-MM-DD HH:MM:SS'},
+        ...
+      ]
+    }
+  }
 ```

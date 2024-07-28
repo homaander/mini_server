@@ -1,6 +1,7 @@
 module User (
     registerUser
   , loginUser
+  , getUsers
   ) where
 
 import Data.Aeson
@@ -59,7 +60,6 @@ registerUser username password = do
       uid <- addUser (User 0 username sha_password "" (show datetime))
       session_key <- genSessionID uid
 
-      -- pure (Responce 0 "" ("{'session_key':'" <> session_key <> "'}"))
       pure (Responce 0 "" (ReqFrom session_key))
 
 
@@ -76,9 +76,19 @@ loginUser username password = do
       else do
         session_key <- genSessionID (userId user)
 
-        -- pure (Responce 0 "" ("{'session_key':'" <> session_key <> "'}"))
         pure (Responce 0 "" (ReqFrom session_key))
 
+
+getUsers :: ReqFrom -> IO [User]
+getUsers reqForm = do
+  let
+    session_key = reqSessionKey reqForm
+
+  users <- withConn $ \conn -> query conn "SELECT * FROM users" ()
+  let
+   users' = map (\user -> user {userPassword = ""}) users
+
+  pure users'
 
 findUserByLogin :: String -> IO (Maybe User)
 findUserByLogin login = do
