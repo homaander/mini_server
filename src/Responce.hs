@@ -32,7 +32,7 @@ instance FromJSON ReqFrom where
   parseJSON (Object v) = ReqFrom 
                            <$> v .: "session_key"
   parseJSON _ = error "Error JSON"
-instance ToJSON ReqFrom where
+instance ToJSON ReqFrom where 
   toJSON (ReqFrom session_key) = object [
             "session_key"    .= session_key
           ]

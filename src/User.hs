@@ -79,16 +79,19 @@ loginUser username password = do
         pure (Responce 0 "" (ReqFrom session_key))
 
 
-getUsers :: ReqFrom -> IO [User]
+getUsers :: ReqFrom -> IO (Responce [User])
 getUsers reqForm = do
   let
     session_key = reqSessionKey reqForm
-
-  users <- withConn $ \conn -> query conn "SELECT * FROM users" ()
-  let
-   users' = map (\user -> user {userPassword = ""}) users
-
-  pure users'
+  
+  (checkSess, _) <- checkSession session_key
+  if not checkSess
+    then pure (Responce 1 "session key is not valid" [])
+    else do
+      users <- withConn $ \conn -> query conn "SELECT * FROM users" ()
+      let
+        users' = map (\user -> user {userPassword = ""}) users
+      pure (Responce 0 "" users')
 
 findUserByLogin :: String -> IO (Maybe User)
 findUserByLogin login = do

@@ -12,8 +12,8 @@ POST /register
 
 Ответ:
   {
-    "error": 1 | 0
-    "message": "..." | ""
+    "error": 1 | 0,
+    "message": "..." | "",
     "data": {
       "session_key": "..."
     }
@@ -31,8 +31,8 @@ POST /login
 
 Ответ:
   {
-    "error": 1 | 0
-    "message": "..." | ""
+    "error": 1 | 0,
+    "message": "..." | "",
     "data": {
       "session_key": "..."
     }
@@ -49,8 +49,8 @@ POST /logout
 
 Ответ:
   {
-    "error": 1 | 0
-    "message": "..." | ""
+    "error": 1 | 0,
+    "message": "..." | "",
     "data": ""
   }
 ```
@@ -60,14 +60,14 @@ POST /logout
 Запрос:
 POST /send
   {
-    "session_key": "..."
+    "session_key": "...",
     "message": "..."
   }
 
 Ответ:
   {
-    "error": 1|0
-    "message": "..."|""
+    "error": 1 | 0,
+    "message": "..." | "",
     "data": ""
   }
 ```
@@ -75,18 +75,18 @@ POST /send
 ## Получение сообщения
 ```
 Запрос:
-POST /get_messages
+POST /get
   {
        "session_key": "..."
   }
 
 Ответ:
   {
-    "error": 1|0
-    "message": "..."|""
+    "error": 1 | 0,
+    "message": "..." |" ",
     "data": {
       "messages": [
-        {'user_id':...,'body':'...','send_time':'YYYY-MM-DD HH:MM:SS'}, 
+        {'user_id':..., 'body':'...', 'send_time':'YYYY-MM-DD HH:MM:SS'}, 
         ..
       ]
     }
@@ -103,8 +103,8 @@ POST /get_users
 
 Ответ:
   {
-    "error": 1|0
-    "message": "..."|""
+    "error": 1 | 0,
+    "message": "..." | "",
     "data": {
       'users': [
         {'user_id':...,'avatar':'...','login':'...','create_time':'YYYY-MM-DD HH:MM:SS'},

@@ -1,10 +1,13 @@
 module Session (
     genSessionID
   , disableSession
+  , checkSession
   ) where
 
 import System.Random
 import Data.Time
+
+import Data.Aeson
 
 import qualified Crypto.Hash.SHA1 as SHA1
 import qualified Data.ByteString.Char8 as BC
@@ -12,6 +15,37 @@ import qualified Data.ByteString.Base16 as BS16
 
 import Database.SQLite.Simple
 import DBInit (withConn)
+
+
+data Session = Session {
+    sessID         :: Int
+  , sessIsActive   :: Int
+  , sessOwnerID    :: Int
+  , sessCreateTime :: String
+  , sessSessionKey :: String
+  }
+    deriving (Show)
+
+instance FromRow Session where
+  fromRow = Session <$> field <*> field <*> field <*> field <*> field
+
+instance FromJSON Session where
+  parseJSON (Object v) = Session 
+                           <$> v .: "id"
+                           <*> v .: "is_active"
+                           <*> v .: "owner_id"
+                           <*> v .: "create_time"
+                           <*> v .: "session_key"
+  parseJSON _ = error "Error JSON"
+instance ToJSON Session where
+  toJSON (Session sess_id is_active owner_id create_time session_key) = object [
+        "id"          .= sess_id
+      , "is_active"   .= is_active
+      , "owner_id"    .= owner_id
+      , "create_time" .= create_time
+      , "session_key" .= session_key
+      ]
+
 
 genSessionID :: Int -> IO String
 genSessionID uid = do
@@ -28,6 +62,19 @@ genSessionID uid = do
     putStrLn $ show datetime <> "| Session success added"
 
   pure session_key
+
+
+checkSession :: String -> IO (Bool, Int)
+checkSession session_key = do
+    -- datetime <- getCurrentTime
+    session <- (
+        withConn $ \conn -> 
+          query conn "SELECT * FROM session_ids WHERE is_active=1 AND session_key=(?)" (Only session_key)
+      ) :: IO [Session]
+    if null session
+      then pure (False, 0)
+      else
+       pure (True, sessOwnerID $ head session)
 
 
 disableSession :: String -> IO ()

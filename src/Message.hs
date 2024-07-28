@@ -9,6 +9,8 @@ import Data.Aeson
 import Database.SQLite.Simple
 import DBInit (withConn)
 
+import Data.Time
+
 import Responce
 import Session
 import User
@@ -61,16 +63,33 @@ instance ToJSON Message where
 send :: SendForm -> IO (Responce String)
 send sendForm = do
   let
-      session_key = sfSessionKey sendForm
-      message     = sfMessage sendForm
-  pure (Responce 0 "" "")
+    session_key = sfSessionKey sendForm
+    message     = sfMessage sendForm
+
+  (checkSess, user_id) <- checkSession session_key
+
+  if not checkSess
+    then pure (Responce 1 "session key is not valid" [])
+    else do
+      _ <- withConn $ \conn -> do
+        datetime <- getCurrentTime
+
+        execute conn
+          "INSERT INTO messages (owner_id, body, send_date) VALUES (?, ?, ?)"
+          (user_id, message, show datetime)
+
+      pure (Responce 0 "" "OK")
 
 getMessages :: ReqFrom -> IO (Responce [Message])
 getMessages reqForm = do
   let
     session_key = reqSessionKey reqForm
+  (checkSess, _) <- checkSession session_key
 
-  messages <- withConn $ \conn -> query conn "SELECT * FROM messages" ()
+  if not checkSess
+    then pure (Responce 1 "session key is not valid" [])
+    else do
+      messages <- withConn $ \conn -> query conn "SELECT * FROM messages" ()
 
-  print messages
-  pure (Responce 0 "" messages)
+      -- print messages
+      pure (Responce 0 "" messages)
