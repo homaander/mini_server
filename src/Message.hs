@@ -13,7 +13,6 @@ import Data.Time
 
 import Responce
 import Session
-import User
 
 
 data SendForm = SendForm {

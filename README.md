@@ -7,7 +7,7 @@
 POST /register
   {
     "username": "...",
-    "password": "*SHA1_pass*"
+    "password": "*SHA1_PASS*"
   }
 
 Ответ:
@@ -26,7 +26,7 @@ POST /register
 POST /login
   {
     "username": "...",
-    "password": "..."
+    "password": "*SHA1_PASS*"
   }
 
 Ответ:
@@ -77,7 +77,7 @@ POST /send
 Запрос:
 POST /get
   {
-       "session_key": "..."
+    "session_key": "..."
   }
 
 Ответ:
@@ -86,7 +86,7 @@ POST /get
     "message": "..." |" ",
     "data": {
       "messages": [
-        {'user_id':..., 'body':'...', 'send_time':'YYYY-MM-DD HH:MM:SS'}, 
+        {'user_id':..., 'body':'...', 'send_time':'YYYY-MM-DD HH:MM:SS'},
         ..
       ]
     }
