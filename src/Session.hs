@@ -9,12 +9,9 @@ import Data.Time
 
 import Data.Aeson
 
-import qualified Crypto.Hash.SHA1 as SHA1
-import qualified Data.ByteString.Char8 as BC
-import qualified Data.ByteString.Base16 as BS16
-
 import Database.SQLite.Simple
 import DBInit (withConn)
+import Crypto (sha1)
 
 
 data Session = Session {
@@ -52,7 +49,7 @@ genSessionID uid = do
   session_seed <- getStdRandom random :: IO Int
   datetime <- getCurrentTime
 
-  let session_key = BC.unpack $ BS16.encode $ SHA1.hash $ BC.pack $ show session_seed ++ show datetime
+  let session_key = sha1 $ show session_seed ++ show datetime
 
   withConn $ \conn -> do
     execute conn

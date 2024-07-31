@@ -1,4 +1,9 @@
-module Responce where
+module Responce (
+    Responce (..)
+  , ReqFrom (..)
+  , respOk
+  , respDefault
+  ) where
 
 import Data.Aeson
 
@@ -38,7 +43,7 @@ instance ToJSON ReqFrom where
           ]
 
 respOk :: Responce String
-respOk = Responce 0 "success" ""
+respOk  = Responce 0 "success" ""
 
 respDefault :: String -> Responce String
-respDefault = Responce 0 "success"
+respDefault  = Responce 0 "success"

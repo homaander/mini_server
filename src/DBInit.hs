@@ -11,4 +11,4 @@ withConn action = do
   conn <- open dbPath
   resp <- action conn
   close conn
-  return resp
+  pure resp

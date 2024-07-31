@@ -5,7 +5,7 @@ module Main (main) where
 import Web.Scotty
 import Network.Wai.Handler.Warp
 
-import Data.Text.Lazy (Text)
+-- import Data.Text.Lazy (Text)
 
 import Auth
 import Responce

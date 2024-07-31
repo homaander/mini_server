@@ -7,12 +7,9 @@ module User (
 import Data.Aeson
 import Data.Time
 
-import qualified Crypto.Hash.SHA1 as SHA1
-import qualified Data.ByteString.Char8 as BC
-import qualified Data.ByteString.Base16 as BS16
-
 import Database.SQLite.Simple
 import DBInit (withConn)
+import Crypto (sha1)
 
 import Session
 import Responce
@@ -52,7 +49,7 @@ registerUser :: String -> String -> IO (Responce ReqFrom)
 registerUser username password = do
   alredyExist <- findUserByLogin username
   let
-    sha_password = BC.unpack $ BS16.encode $ SHA1.hash $ BC.pack password
+    sha_password = sha1 password
   case alredyExist of
     (Just _) -> pure (Responce 1 "Пользователь с таким именем уже есть" (ReqFrom ""))
     Nothing -> do
@@ -67,7 +64,7 @@ loginUser :: String -> String -> IO (Responce ReqFrom)
 loginUser username password = do
   mbuser <- findUserByLogin username
   let
-    sha_password = BC.unpack $ BS16.encode $ SHA1.hash $ BC.pack password
+    sha_password = sha1 password
   case mbuser of
     Nothing -> pure (Responce 1 "Такой пользователь не зарегистрирован" (ReqFrom ""))
     (Just user) -> do
@@ -93,11 +90,12 @@ getUsers reqForm = do
         users' = map (\user -> user {userPassword = ""}) users
       pure (Responce 0 "" users')
 
+
 findUserByLogin :: String -> IO (Maybe User)
 findUserByLogin login = do
     withConn $ \conn -> do
       resp <- query conn "SELECT * FROM users WHERE username = (?)" (Only login)
-      return $ firstOrNothing resp
+      pure $ firstOrNothing resp
   where
     firstOrNothing []    = Nothing
     firstOrNothing (x:_) = Just x
@@ -113,7 +111,8 @@ addUser user = do
     datetime <- getCurrentTime
 
     execute conn
-      "INSERT INTO users (username, userpass, avatar, create_date) VALUES (?, ?, '', ?)"
+      "INSERT INTO users (username, userpass, avatar, create_date)\
+      \ VALUES (?, ?, '', ?)"
       (user_name, user_pass, show datetime)
 
     putStrLn $ show datetime <> "| User success added"
