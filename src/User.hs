@@ -116,7 +116,6 @@ addUser user = do
       (user_name, user_pass, show datetime)
 
     putStrLn $ show datetime <> "| User success added"
-
     lastInsertRowId conn
 
   pure (fromIntegral user_id)

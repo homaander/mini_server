@@ -5,8 +5,6 @@ module Main (main) where
 import Web.Scotty
 import Network.Wai.Handler.Warp
 
--- import Data.Text.Lazy (Text)
-
 import Auth
 import Responce
 import Message
@@ -26,32 +24,32 @@ main = scottyOpts opts $ do
       json respOk
 
   post "/register" $ do
-    regForm <- jsonData :: ActionM RegForm
+    regForm <- jsonData
     resp <- liftIO $ register regForm
     json resp
 
   post "/login" $ do
-    loginForm <- jsonData :: ActionM AuthForm
+    loginForm <- jsonData
     resp <- liftIO $ login loginForm
     json resp
 
   post "/logout" $ do
-    reqForm <- jsonData :: ActionM ReqFrom
+    reqForm <- jsonData
     resp <- liftIO $ logout reqForm
     json resp
 
   post "/get" $ do
-    reqForm <- jsonData :: ActionM ReqFrom
+    reqForm <- jsonData
     resp <- liftIO $ getMessages reqForm
     json resp
 
   post "/get_users" $ do
-    reqForm <- jsonData :: ActionM ReqFrom
+    reqForm <- jsonData
     resp <- liftIO $ getUsers reqForm
     json resp
 
   post "/send" $ do
-    sendForm <- jsonData :: ActionM SendForm
+    sendForm <- jsonData
     resp <- liftIO $ send sendForm
     json resp
 
