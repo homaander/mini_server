@@ -53,7 +53,8 @@ genSessionID uid = do
 
   withConn $ \conn -> do
     execute conn
-      "INSERT INTO session_ids (is_active, owner_id, create_date, session_key) VALUES (1, ?, ?, ?)"
+      "INSERT INTO session_ids (is_active, owner_id, create_date, session_key)\
+      \ VALUES (1, ?, ?, ?)"
       (uid, show datetime, session_key)
 
     putStrLn $ show datetime <> "| Session success added"
@@ -63,15 +64,18 @@ genSessionID uid = do
 
 checkSession :: String -> IO (Bool, Int)
 checkSession session_key = do
-    -- datetime <- getCurrentTime
-    session <- (
-        withConn $ \conn -> 
-          query conn "SELECT * FROM session_ids WHERE is_active=1 AND session_key=(?)" (Only session_key)
-      ) :: IO [Session]
-    if null session
-      then pure (False, 0)
-      else
-       pure (True, sessOwnerID $ head session)
+  -- datetime <- getCurrentTime
+  session <- (
+      withConn $ \conn -> 
+        query conn "SELECT * FROM session_ids\
+        \ WHERE is_active=1 AND session_key=(?)"
+        (Only session_key)
+    ) :: IO [Session]
+
+  if null session then
+    pure (False, 0)
+  else
+    pure (True, sessOwnerID $ head session)
 
 
 disableSession :: String -> IO ()

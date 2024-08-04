@@ -21,7 +21,7 @@ opts = Options 1 $ (
 main :: IO ()
 main = scottyOpts opts $ do
   post "/test" $ do
-      json respOk
+    json respOk
 
   post "/register" $ do
     regForm <- jsonData
@@ -55,5 +55,5 @@ main = scottyOpts opts $ do
 
   get "/" $ do
     html $ mconcat [
-        "<h1>" <> "Scotty, Index me up!" <> "</h1>"
+      "<h1>" <> "Scotty, Index me up!" <> "</h1>"
       ]

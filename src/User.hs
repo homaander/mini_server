@@ -68,11 +68,10 @@ loginUser username password = do
   case mbuser of
     Nothing -> pure (Responce 1 "Такой пользователь не зарегистрирован" (ReqFrom ""))
     (Just user) -> do
-      if userPassword user /= sha_password
-        then pure (Responce 1 "Неверный пароль" (ReqFrom ""))
+      if userPassword user /= sha_password then
+        pure (Responce 1 "Неверный пароль" (ReqFrom ""))
       else do
         session_key <- genSessionID (userId user)
-
         pure (Responce 0 "" (ReqFrom session_key))
 
 
@@ -80,15 +79,16 @@ getUsers :: ReqFrom -> IO (Responce [User])
 getUsers reqForm = do
   let
     session_key = reqSessionKey reqForm
-  
+
   (checkSess, _) <- checkSession session_key
-  if not checkSess
-    then pure (Responce 1 "session key is not valid" [])
-    else do
-      users <- withConn $ \conn -> query conn "SELECT * FROM users" ()
-      let
-        users' = map (\user -> user {userPassword = ""}) users
-      pure (Responce 0 "" users')
+
+  if not checkSess then
+    pure (Responce 1 "session key is not valid" [])
+  else do
+    users <- withConn $ \conn -> query conn "SELECT * FROM users" ()
+    let
+      users' = map (\user -> user {userPassword = ""}) users
+    pure (Responce 0 "" users')
 
 
 findUserByLogin :: String -> IO (Maybe User)

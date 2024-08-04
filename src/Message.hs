@@ -28,9 +28,9 @@ instance FromJSON SendForm where
   parseJSON _ = error "Error JSON"
 instance ToJSON SendForm where
   toJSON (SendForm session_key message) = object [
-        "session_key" .= session_key
-      , "message"     .= message
-      ]
+      "session_key" .= session_key
+    , "message"     .= message
+    ]
 
 data Message = Message {
     msgID       :: Int
@@ -52,44 +52,47 @@ instance FromJSON Message where
   parseJSON _ = error "Error JSON"
 instance ToJSON Message where
   toJSON (Message msg_id user_id body send_time) = object [
-        "id"        .= msg_id
-      , "user_id"   .= user_id
-      , "body"      .= body
-      , "send_time" .= send_time
-      ]
+      "id"        .= msg_id
+    , "user_id"   .= user_id
+    , "body"      .= body
+    , "send_time" .= send_time
+    ]
 
 
 send :: SendForm -> IO (Responce String)
 send sendForm = do
   let
     session_key = sfSessionKey sendForm
-    message     = sfMessage sendForm
+    message     = sfMessage    sendForm
 
   (checkSess, user_id) <- checkSession session_key
 
-  if not checkSess
-    then pure (Responce 1 "session key is not valid" [])
-    else do
-      _ <- withConn $ \conn -> do
-        datetime <- getCurrentTime
+  if not checkSess then 
+    pure (Responce 1 "session key is not valid" [])
+  else if null message then
+    pure (Responce 1 "nnn" "OK")
+  else do
+    _ <- withConn $ \conn -> do
+      datetime <- getCurrentTime
 
-        execute conn
-          "INSERT INTO messages (owner_id, body, send_date) VALUES (?, ?, ?)"
-          (user_id, message, show datetime)
+      execute conn
+        "INSERT INTO messages (owner_id, body, send_date) VALUES (?, ?, ?)"
+        (user_id, message, show datetime)
 
-      pure (Responce 0 "" "OK")
+    pure (Responce 0 "" "OK")
 
 
 getMessages :: ReqFrom -> IO (Responce [Message])
 getMessages reqForm = do
   let
     session_key = reqSessionKey reqForm
+
   (checkSess, _) <- checkSession session_key
 
-  if not checkSess
-    then pure (Responce 1 "session key is not valid" [])
-    else do
-      messages <- withConn $ \conn -> query conn "SELECT * FROM messages" ()
+  if not checkSess then
+    pure (Responce 1 "session key is not valid" [])
+  else do
+    messages <- withConn $ \conn -> query conn "SELECT * FROM messages" ()
 
-      -- print messages
-      pure (Responce 0 "" messages)
+    -- print messages
+    pure (Responce 0 "" messages)
